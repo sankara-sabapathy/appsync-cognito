@@ -1,0 +1,32 @@
+service: thirukkural-appsync-cognito
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  region: ap-south-1
+  deploymentMethod: direct
+  tracing:
+    apiGateway: true
+    lambda: true
+    
+  # Default function configurations
+  runtime: nodejs18.x
+  memorySize: 512
+  timeout: 10
+  environment:
+    ENV: ${opt:stage, 'dev'}
+  logRetentionInDays: 1
+  versionFunctions: false
+  architecture: x86_64
+
+package:
+  individually: true
+
+functions:
+  getKuralByNumber:
+    handler: src/functions/getKuralByNumber/index.handler
+    name: ${self:service}-${self:provider.stage}-getKuralByNumber
+    description: This function is used to fetch a Thirukkural using number.
+    role: arn:aws:iam::XXXXXX:role/role
